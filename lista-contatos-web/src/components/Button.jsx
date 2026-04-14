@@ -1,6 +1,7 @@
 import React from 'react';
 import './Button.css';
 
+// Componente de botão reutilizável com variantes e tamanhos.
 export function Button({ 
   children, 
   onClick, 

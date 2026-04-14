@@ -2,7 +2,8 @@ import React from 'react';
 import { ContactCard } from '../components/ContactCard';
 import './ContactsPage.css';
 
-export function ContactsPage({ contacts, onContactClick, onDeleteClick, onAddClick }) {
+// Tela principal com listagem de contatos e atalho para cadastro.
+export function ContactsPage({ contacts, onContactClick, onAddClick }) {
   return (
     <div className="contacts-page">
       {/* Header */}
@@ -23,7 +24,6 @@ export function ContactsPage({ contacts, onContactClick, onDeleteClick, onAddCli
               key={contact.id}
               contact={contact}
               onClick={() => onContactClick(contact.id)}
-              onDelete={() => onDeleteClick(contact.id, contact.name)}
             />
           ))
         ) : (

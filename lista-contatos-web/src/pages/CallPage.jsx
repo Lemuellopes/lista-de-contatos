@@ -1,12 +1,12 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Avatar } from '../components/Avatar';
 import { Button } from '../components/Button';
 import './CallPage.css';
 
-export function CallPage({ contact, onBack, onUpdatePhoto }) {
+export function CallPage({ contact, onBack }) {
+  // Controla os estados: pronto, ligando e chamada ativa.
   const [callPhase, setCallPhase] = useState('ready');
   const [duration, setDuration] = useState(0);
-  const fileInputRef = useRef(null);
   const isDialing = callPhase === 'dialing';
   const isCallActive = callPhase === 'active';
 
@@ -36,6 +36,7 @@ export function CallPage({ contact, onBack, onUpdatePhoto }) {
     return () => clearInterval(interval);
   }, [isCallActive]);
 
+  // Converte segundos para o formato MM:SS.
   const formatDuration = (seconds) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
@@ -60,26 +61,6 @@ export function CallPage({ contact, onBack, onUpdatePhoto }) {
     setCallPhase('ready');
     setDuration(0);
     onBack();
-  };
-
-  const handlePickPhotoClick = () => {
-    fileInputRef.current?.click();
-  };
-
-  const handlePhotoChange = (event) => {
-    const file = event.target.files?.[0];
-
-    if (!file || !contact) {
-      return;
-    }
-
-    const reader = new FileReader();
-    reader.onload = () => {
-      if (typeof onUpdatePhoto === 'function') {
-        onUpdatePhoto(contact.id, reader.result);
-      }
-    };
-    reader.readAsDataURL(file);
   };
 
   if (!contact) {
@@ -109,7 +90,6 @@ export function CallPage({ contact, onBack, onUpdatePhoto }) {
           <Avatar 
             initials={contact.initials} 
             color={contact.color} 
-            photo={contact.photo}
             size="large" 
           />
         </div>
@@ -117,16 +97,6 @@ export function CallPage({ contact, onBack, onUpdatePhoto }) {
         {/* Contact Info */}
         <h2 className="call-name">{contact.name}</h2>
         <p className="call-phone">{contact.phone}</p>
-        <button type="button" className="photo-change-button" onClick={handlePickPhotoClick}>
-          {contact.photo ? 'Trocar foto' : 'Adicionar foto'}
-        </button>
-        <input
-          ref={fileInputRef}
-          type="file"
-          accept="image/*"
-          className="photo-input-hidden"
-          onChange={handlePhotoChange}
-        />
 
         {/* Call Status */}
         <div className="call-status">

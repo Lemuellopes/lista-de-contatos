@@ -77,26 +77,6 @@
   text-align: center;
 }
 
-.photo-change-button {
-  margin-top: -4px;
-  border: 1px solid var(--border);
-  background: rgba(255, 255, 255, 0.75);
-  color: var(--primary-strong);
-  border-radius: 999px;
-  padding: 8px 14px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  transition: var(--transition);
-}
-
-.photo-change-button:hover {
-  background: #fff;
-}
-
-.photo-input-hidden {
-  display: none;
-}
-
 .call-status {
   text-align: center;
   margin-top: 10px;

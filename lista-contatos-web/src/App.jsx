@@ -7,43 +7,27 @@ import './App.css';
 
 function App() {
   // Estado para controlar qual página está sendo exibida
-  const { contacts, isLoaded, addContact, removeContact, updateContactPhoto, getContactById } = useContacts();
+  const { contacts, isLoaded, addContact, getContactById } = useContacts();
   // Estado para armazenar o ID do contato selecionado
   const [currentPage, setCurrentPage] = useState('contacts');
-  // Hook customizado que gerencia os contatos
+  // Estado para guardar o contato escolhido para a tela de chamada.
   const [selectedContactId, setSelectedContactId] = useState(null);
-// Encontra o contato selecionado
+  // Encontra o contato selecionado a partir do ID salvo no estado.
   const selectedContact = selectedContactId ? getContactById(selectedContactId) : null;
 
+  // Abre a tela de chamada com o contato clicado.
   const handleContactClick = (id) => {
     setSelectedContactId(id);
     setCurrentPage('call'); // Muda para página de ligação
   };
-// Quando um novo contato é adicionado
-  const handleAddContact = (name, phone, photo) => {
-    addContact(name, phone, photo);
+
+  // Adiciona o contato e retorna para a listagem.
+  const handleAddContact = (name, phone) => {
+    addContact(name, phone);
     setCurrentPage('contacts');
   };
 
-  const handleDeleteContact = (id, name) => {
-    const shouldDelete = window.confirm(`Deseja excluir o contato ${name}?`);
-
-    if (!shouldDelete) {
-      return;
-    }
-
-    removeContact(id);
-
-    if (selectedContactId === id) {
-      setSelectedContactId(null);
-      setCurrentPage('contacts');
-    }
-  };
-
-  const handleUpdateContactPhoto = (id, photo) => {
-    updateContactPhoto(id, photo);
-  };
-
+  // Exibe loading enquanto os contatos ainda não foram carregados.
   if (!isLoaded) {
     return (
       <div className="app loading">
@@ -59,7 +43,6 @@ function App() {
         <ContactsPage
           contacts={contacts}
           onContactClick={handleContactClick}
-          onDeleteClick={handleDeleteContact}
           onAddClick={() => setCurrentPage('add')}
         />
       )}
@@ -67,7 +50,6 @@ function App() {
       {currentPage === 'call' && (
         <CallPage
           contact={selectedContact}
-          onUpdatePhoto={handleUpdateContactPhoto}
           onBack={() => setCurrentPage('contacts')}
         />
       )}

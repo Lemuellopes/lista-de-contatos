@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 
+// Chave usada para persistir os contatos no localStorage.
 const STORAGE_KEY = 'contacts_list';
 
+// Lista padrão carregada quando não há dados persistidos.
 const initialContacts = [
   {
     id: '1',
@@ -44,25 +46,18 @@ export function useContacts() {
   const [contacts, setContacts] = useState(initialContacts);
   const [isLoaded, setIsLoaded] = useState(false);
 
-  const normalizeContacts = (contactList) => {
-    return contactList.map((contact) => ({
-      ...contact,
-      photo: contact.photo || null
-    }));
-  };
-
   // Carregar contatos do localStorage ao iniciar
   useEffect(() => {
     const stored = localStorage.getItem(STORAGE_KEY);
     if (stored) {
       try {
-        setContacts(normalizeContacts(JSON.parse(stored)));
+        setContacts(JSON.parse(stored));
       } catch (error) {
         console.error('Erro ao carregar contatos:', error);
-        setContacts(normalizeContacts(initialContacts));
+        setContacts(initialContacts);
       }
     } else {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(normalizeContacts(initialContacts)));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(initialContacts));
     }
     setIsLoaded(true);
   }, []);
@@ -73,7 +68,8 @@ export function useContacts() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(newContacts));
   };
 
-  const addContact = (name, phone, photo = null) => {
+  // Cria e salva um novo contato na lista.
+  const addContact = (name, phone) => {
     const initials = name
       .split(' ')
       .slice(0, 2)
@@ -89,8 +85,7 @@ export function useContacts() {
       name,
       phone,
       initials,
-      color,
-      photo
+      color
     };
 
     const updated = [...contacts, newContact];
@@ -103,14 +98,7 @@ export function useContacts() {
     saveContacts(updated);
   };
 
-  const updateContactPhoto = (id, photo) => {
-    const updated = contacts.map((contact) => (
-      contact.id === id ? { ...contact, photo } : contact
-    ));
-
-    saveContacts(updated);
-  };
-
+  // Busca um contato específico pelo ID.
   const getContactById = (id) => {
     return contacts.find(c => c.id === id);
   };
@@ -120,7 +108,6 @@ export function useContacts() {
     isLoaded,
     addContact,
     removeContact,
-    updateContactPhoto,
     getContactById
   };
 }

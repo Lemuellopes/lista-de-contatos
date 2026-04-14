@@ -3,38 +3,14 @@ import { FormInput, phoneMask } from '../components/FormInput';
 import { Button } from '../components/Button';
 import './AddContactPage.css';
 
+// Tela de cadastro de novo contato.
 export function AddContactPage({ onAdd, onCancel }) {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
-  const [photo, setPhoto] = useState(null);
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
 
-  const handlePhotoChange = (event) => {
-    const file = event.target.files?.[0];
-
-    if (!file) {
-      return;
-    }
-
-    const maxFileSizeInBytes = 2 * 1024 * 1024;
-
-    if (file.size > maxFileSizeInBytes) {
-      setErrors((prev) => ({
-        ...prev,
-        photo: 'A foto deve ter no máximo 2MB'
-      }));
-      return;
-    }
-
-    const reader = new FileReader();
-    reader.onload = () => {
-      setPhoto(reader.result);
-      setErrors((prev) => ({ ...prev, photo: undefined }));
-    };
-    reader.readAsDataURL(file);
-  };
-
+  // Valida os campos obrigatórios e o formato mínimo do telefone.
   const validateForm = () => {
     const newErrors = {};
 
@@ -52,6 +28,7 @@ export function AddContactPage({ onAdd, onCancel }) {
     return Object.keys(newErrors).length === 0;
   };
 
+  // Submete o formulário e aciona o cadastro no componente pai.
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -64,7 +41,7 @@ export function AddContactPage({ onAdd, onCancel }) {
     // Simular delay de salvamento
     await new Promise(resolve => setTimeout(resolve, 500));
 
-    onAdd(name.trim(), phone, photo);
+    onAdd(name.trim(), phone);
     setIsLoading(false);
   };
 
@@ -86,13 +63,9 @@ export function AddContactPage({ onAdd, onCancel }) {
       <form className="add-contact-form" onSubmit={handleSubmit}>
         {/* Icon */}
         <div className="form-icon">
-          {photo ? (
-            <img className="preview-photo" src={photo} alt="Foto do contato" />
-          ) : (
-            <svg width="40" height="40" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"></path>
-            </svg>
-          )}
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"></path>
+          </svg>
         </div>
 
         {/* Form Fields */}
@@ -116,18 +89,6 @@ export function AddContactPage({ onAdd, onCancel }) {
             maxLength={15}
             disabled={isLoading}
           />
-
-          <div className="photo-field">
-            <label htmlFor="contact-photo" className="photo-label">Foto do Contato</label>
-            <input
-              id="contact-photo"
-              type="file"
-              accept="image/*"
-              onChange={handlePhotoChange}
-              disabled={isLoading}
-            />
-            {errors.photo && <p className="photo-error">{errors.photo}</p>}
-          </div>
 
           {/* Info Text */}
           <div className="form-info">
