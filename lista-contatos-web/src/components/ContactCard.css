@@ -1,0 +1,95 @@
+.contact-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: var(--surface-strong);
+  box-shadow: var(--shadow-soft);
+  cursor: pointer;
+  transition: var(--transition);
+  animation: revealCard 340ms ease both;
+}
+
+.contact-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(15, 118, 110, 0.28);
+  box-shadow: 0 14px 24px rgba(15, 23, 42, 0.12);
+}
+
+.contact-card:active {
+  opacity: 0.88;
+  transform: scale(0.995);
+}
+
+.contact-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.contact-name {
+  font-size: 1.03rem;
+  font-weight: 700;
+  color: var(--foreground);
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.contact-phone {
+  font-size: 0.89rem;
+  color: var(--muted);
+  margin: 4px 0 0 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.contact-arrow {
+  color: var(--primary);
+  opacity: 0.8;
+  flex-shrink: 0;
+}
+
+.contact-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.delete-contact-button {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  border: 1px solid rgba(239, 68, 68, 0.22);
+  color: #ef4444;
+  display: grid;
+  place-items: center;
+  background: rgba(254, 226, 226, 0.6);
+  transition: var(--transition);
+}
+
+.delete-contact-button:hover {
+  background: rgba(239, 68, 68, 0.12);
+  transform: translateY(-1px);
+}
+
+.contact-card:nth-child(2) { animation-delay: 40ms; }
+.contact-card:nth-child(3) { animation-delay: 80ms; }
+.contact-card:nth-child(4) { animation-delay: 120ms; }
+.contact-card:nth-child(5) { animation-delay: 160ms; }
+
+@keyframes revealCard {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

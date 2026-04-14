@@ -1,0 +1,126 @@
+import { useState, useEffect } from 'react';
+
+const STORAGE_KEY = 'contacts_list';
+
+const initialContacts = [
+  {
+    id: '1',
+    name: 'João Silva',
+    phone: '(11) 98765-4321',
+    initials: 'JS',
+    color: '#3b82f6'
+  },
+  {
+    id: '2',
+    name: 'Maria Santos',
+    phone: '(21) 99876-5432',
+    initials: 'MS',
+    color: '#8b5cf6'
+  },
+  {
+    id: '3',
+    name: 'Pedro Costa',
+    phone: '(31) 97654-3210',
+    initials: 'PC',
+    color: '#ec4899'
+  },
+  {
+    id: '4',
+    name: 'Ana Oliveira',
+    phone: '(41) 96543-2109',
+    initials: 'AO',
+    color: '#10b981'
+  },
+  {
+    id: '5',
+    name: 'Carlos Ferreira',
+    phone: '(51) 95432-1098',
+    initials: 'CF',
+    color: '#f59e0b'
+  }
+];
+
+export function useContacts() {
+  const [contacts, setContacts] = useState(initialContacts);
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  const normalizeContacts = (contactList) => {
+    return contactList.map((contact) => ({
+      ...contact,
+      photo: contact.photo || null
+    }));
+  };
+
+  // Carregar contatos do localStorage ao iniciar
+  useEffect(() => {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored) {
+      try {
+        setContacts(normalizeContacts(JSON.parse(stored)));
+      } catch (error) {
+        console.error('Erro ao carregar contatos:', error);
+        setContacts(normalizeContacts(initialContacts));
+      }
+    } else {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(normalizeContacts(initialContacts)));
+    }
+    setIsLoaded(true);
+  }, []);
+
+  // Salva contatos no localStorage
+  const saveContacts = (newContacts) => {
+    setContacts(newContacts);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(newContacts));
+  };
+
+  const addContact = (name, phone, photo = null) => {
+    const initials = name
+      .split(' ')
+      .slice(0, 2)
+      .map(word => word[0])
+      .join('')
+      .toUpperCase();
+
+    const colors = ['#3b82f6', '#8b5cf6', '#ec4899', '#10b981', '#f59e0b', '#ef4444', '#06b6d4', '#6366f1'];
+    const color = colors[Math.floor(Math.random() * colors.length)];
+
+    const newContact = {
+      id: Date.now().toString(),
+      name,
+      phone,
+      initials,
+      color,
+      photo
+    };
+
+    const updated = [...contacts, newContact];
+    saveContacts(updated);
+    return newContact;
+  };
+
+  const removeContact = (id) => {
+    const updated = contacts.filter(c => c.id !== id);
+    saveContacts(updated);
+  };
+
+  const updateContactPhoto = (id, photo) => {
+    const updated = contacts.map((contact) => (
+      contact.id === id ? { ...contact, photo } : contact
+    ));
+
+    saveContacts(updated);
+  };
+
+  const getContactById = (id) => {
+    return contacts.find(c => c.id === id);
+  };
+
+  return {
+    contacts,
+    isLoaded,
+    addContact,
+    removeContact,
+    updateContactPhoto,
+    getContactById
+  };
+}

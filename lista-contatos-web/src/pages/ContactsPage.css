@@ -1,0 +1,115 @@
+.contacts-page {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  position: relative;
+  z-index: 1;
+}
+
+.contacts-header {
+  padding: 28px 24px 18px;
+  border-bottom: 1px solid var(--border);
+  background: linear-gradient(180deg, var(--surface-strong) 0%, rgba(255, 255, 255, 0.55) 100%);
+  backdrop-filter: blur(8px);
+}
+
+.contacts-title {
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  font-weight: 700;
+  color: var(--foreground);
+  margin: 0;
+  line-height: 1;
+}
+
+.contacts-subtitle {
+  font-size: 0.95rem;
+  color: var(--muted);
+  margin: 10px 0 0 0;
+}
+
+.contacts-list {
+  flex: 1;
+  overflow-y: auto;
+  background: transparent;
+  padding: 14px 16px 92px;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  gap: 14px;
+  color: var(--muted);
+  padding: 32px 24px;
+  text-align: center;
+  background: var(--surface-strong);
+  border-radius: 24px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-soft);
+}
+
+.empty-state svg {
+  color: var(--primary);
+  opacity: 0.9;
+}
+
+.empty-state h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--foreground);
+  margin: 0;
+}
+
+.empty-state p {
+  font-size: 14px;
+  color: var(--muted);
+  margin: 0;
+}
+
+/* Floating Action Button */
+.fab {
+  position: absolute;
+  bottom: 26px;
+  right: 24px;
+  width: 60px;
+  height: 60px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-strong) 100%);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 14px 24px rgba(15, 118, 110, 0.34);
+  transition: var(--transition);
+  z-index: 10;
+}
+
+.fab:hover {
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: 0 18px 28px rgba(15, 118, 110, 0.42);
+}
+
+.fab:active {
+  transform: scale(0.95);
+}
+
+@media (max-width: 768px) {
+  .contacts-header {
+    padding: 24px 16px 14px;
+  }
+
+  .contacts-list {
+    padding: 12px 12px 84px;
+  }
+
+  .fab {
+    right: 16px;
+    bottom: 16px;
+    width: 56px;
+    height: 56px;
+  }
+}
